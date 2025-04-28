@@ -101,8 +101,9 @@ app.get(
       if (!!req.query["minDuracao"]) {
         query["duracao_horas"] = { $gte: Number(req.query["minDuracao"]) };
       }
-      if (!!req.query["minAvaliacao"])
+      if (!!req.query["minAvaliacao"]) {
         query["avaliacao"] = { $gte: Number(req.query["minAvaliacao"]) };
+      }
 
       const cursos = await db.collection("cursos").find(query).toArray();
       res.json(cursos);
