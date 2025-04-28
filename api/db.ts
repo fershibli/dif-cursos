@@ -1,8 +1,5 @@
 import { MongoClient } from "mongodb";
-
-const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  "mongodb+srv://dodowenzel:MBSKOnW8UipvlYYH@cursos-online.oz1cz2p.mongodb.net/cursosdb?retryWrites=true&w=majority";
+import { MONGODB_URI } from "./config";
 
 let databaseConnection: any = null;
 
