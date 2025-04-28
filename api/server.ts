@@ -23,7 +23,7 @@ import express, { Request, Response } from "express";
    if (cachedDb) return cachedDb;
    const client = new MongoClient(MONGODB_URI);
    await client.connect();
-   cachedDb = client.db("cursos_db");
+   cachedDb = client.db("cursos-online");
    return cachedDb;
  }
  
