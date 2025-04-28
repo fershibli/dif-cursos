@@ -398,6 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function aplicarFiltrosAvancados(e) {
+    estado.tipoBusca = "avancada";
     e.preventDefault();
     const minPreco = document.getElementById("minPreco").value;
     const maxPreco = document.getElementById("maxPreco").value;
