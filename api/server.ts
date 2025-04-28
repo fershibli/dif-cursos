@@ -5,7 +5,6 @@ import { body, param, query, validationResult } from "express-validator";
 import path from "path";
 import dotenv from "dotenv";
 import { getDatabaseConnection } from "./db";
-import { ENVIRONMENT, PORT } from "./config";
 
 dotenv.config();
 
@@ -164,11 +163,5 @@ app.delete("/api/cursos/:id", async (req: Request, res: Response) => {
     res.status(500).json({ message: "Erro ao excluir curso", error });
   }
 });
-
-if (ENVIRONMENT === "development") {
-  app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-  });
-}
 
 export default app;
