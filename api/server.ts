@@ -74,6 +74,7 @@ app.get(
     query("categoria").optional().isString(),
     query("minDuracao").optional().isFloat(),
     query("minAvaliacao").optional().isFloat({ min: 0, max: 5 }),
+    query("tituloOuInstrutor").optional().isString(),
   ],
   async (req: Request, res: Response) => {
     try {
@@ -84,17 +85,24 @@ app.get(
       const db = await getDatabaseConnection();
       const query: any = {};
 
-      if (req.query.minPreco || req.query.maxPreco) {
-        query.preco = {};
-        if (req.query.minPreco) query.preco.$gte = Number(req.query.minPreco);
-        if (req.query.maxPreco) query.preco.$lte = Number(req.query.maxPreco);
+      if (req.query["minPreco"] || req.query["maxPreco"]) {
+        query["preco"] = {};
+        if (req.query["minPreco"]) {
+          query["preco"]["$gte"] = Number(req.query["minPreco"]);
+        }
+        if (req.query["maxPreco"]) {
+          query["preco"]["$lte"] = Number(req.query["maxPreco"]);
+        }
       }
 
-      if (req.query.categoria) query.categoria = req.query.categoria;
-      if (req.query.minDuracao)
-        query.duracao_horas = { $gte: Number(req.query.minDuracao) };
-      if (req.query.minAvaliacao)
-        query.avaliacao = { $gte: Number(req.query.minAvaliacao) };
+      if (req.query["categoria"]) {
+        query["categoria"] = req.query["categoria"];
+      }
+      if (req.query["minDuracao"]) {
+        query["duracao_horas"] = { $gte: Number(req.query["minDuracao"]) };
+      }
+      if (req.query["minAvaliacao"])
+        query["avaliacao"] = { $gte: Number(req.query["minAvaliacao"]) };
 
       const cursos = await db.collection("cursos").find(query).toArray();
       res.json(cursos);
