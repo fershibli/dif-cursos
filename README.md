@@ -36,7 +36,7 @@ dif-cursos/                       # Raiz do projeto
 
 ## Vercel
 
-![Link da API no Vercel](https://dif-cursos.vercel.app)
+[Link da API no Vercel](https://dif-cursos.vercel.app)
 
 ## Stacks 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
@@ -47,4 +47,5 @@ dif-cursos/                       # Raiz do projeto
 ![Node](https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+
 
