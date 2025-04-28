@@ -91,34 +91,72 @@ app.get("/api/cursos/:id", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/api/cursos/search/advanced", [
-  query("minPreco").optional().isFloat(),
-  query("maxPreco").optional().isFloat(),
-  query("categoria").optional().isString(),
-  query("minDuracao").optional().isFloat(),
-  query("minAvaliacao").optional().isFloat({ min: 0, max: 5 }),
+app.get("/api/cursos/search", [
+  query('search').optional().isString(),
+  query('minPrice').optional().isFloat(),
+  query('maxPrice').optional().isFloat(),
+  query('minRating').optional().isFloat({min:0,max:5}),
+  query('category').optional().isString(),
+  query('page').isInt({min:1}),
+  query('limit').isInt({min:1,max:100})
 ], async (req: Request, res: Response) => {
   try {
+    // Validação
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-
-    const db = await connectToDatabase();
-    const query: any = {};
-
-    if (req.query.minPreco || req.query.maxPreco) {
-      query.preco = {};
-      if (req.query.minPreco) query.preco.$gte = Number(req.query.minPreco);
-      if (req.query.maxPreco) query.preco.$lte = Number(req.query.maxPreco);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    if (req.query.categoria) query.categoria = req.query.categoria;
-    if (req.query.minDuracao) query.duracao_horas = { $gte: Number(req.query.minDuracao) };
-    if (req.query.minAvaliacao) query.avaliacao = { $gte: Number(req.query.minAvaliacao) };
+    const db = await connectToDatabase();
+    let query: any = {};
 
-    const cursos = await db.collection("cursos").find(query).toArray();
-    res.json(cursos);
+    // Busca textual (title ou instructor)
+    if (req.query.search) {
+      query.$or = [
+        { titulo: { $regex: req.query.search, $options: 'i' } },
+        { instrutor: { $regex: req.query.search, $options: 'i' } }
+      ];
+    }
+
+    // Filtros numéricos
+    if (req.query.minPrice || req.query.maxPrice) {
+      query.preco = {};
+      if (req.query.minPrice) query.preco.$gte = Number(req.query.minPrice);
+      if (req.query.maxPrice) query.preco.$lte = Number(req.query.maxPrice);
+    }
+
+    if (req.query.minRating) {
+      query.avaliacao = { $gte: Number(req.query.minRating) };
+    }
+
+    // Categoria
+    if (req.query.category) {
+      query.categoria = req.query.category;
+    }
+
+    // Paginação
+    const page = Number(req.query.page);
+    const limit = Number(req.query.limit);
+    const skip = (page - 1) * limit;
+
+    const [cursos, total] = await Promise.all([
+      db.collection("cursos").find(query).skip(skip).limit(limit).toArray(),
+      db.collection("cursos").countDocuments(query)
+    ]);
+
+    res.json({
+      data: cursos,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    });
+
   } catch (error) {
-    res.status(500).json({ message: "Erro na busca avançada", error });
+    console.error('Erro na busca:', error);
+    res.status(500).json({ message: "Erro interno no servidor" });
   }
 });
 
