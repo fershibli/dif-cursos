@@ -4,28 +4,15 @@ import cors from "cors";
 import { body, param, query, validationResult } from "express-validator";
 import path from "path";
 import dotenv from "dotenv";
+import { getDatabaseConnection } from "./db";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  "mongodb+srv://dodowenzel:MBSKOnW8UipvlYYH@cursos-online.oz1cz2p.mongodb.net/cursosdb?retryWrites=true&w=majority";
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
-
-let cachedDb: any = null;
-
-async function connectToDatabase() {
-  if (cachedDb) return cachedDb;
-  const client = new MongoClient(MONGODB_URI);
-  await client.connect();
-  cachedDb = client.db("cursos-online");
-  return cachedDb;
-}
 
 const validateCourse = [
   body("titulo").notEmpty().withMessage("Título é obrigatório"),
@@ -59,7 +46,7 @@ const validateCourse = [
 
 app.get("/api/cursos", async (req: Request, res: Response) => {
   try {
-    const db = await connectToDatabase();
+    const db = await getDatabaseConnection();
     const cursos = await db.collection("cursos").find({}).toArray();
     res.json(cursos);
   } catch (error) {
@@ -69,7 +56,7 @@ app.get("/api/cursos", async (req: Request, res: Response) => {
 
 app.get("/api/cursos/:id", async (req: Request, res: Response) => {
   try {
-    const db = await connectToDatabase();
+    const db = await getDatabaseConnection();
     const curso = await db.collection("cursos").findOne({
       _id: new ObjectId(req.params.id),
     });
@@ -96,7 +83,7 @@ app.get(
       if (!errors.isEmpty())
         return res.status(400).json({ errors: errors.array() });
 
-      const db = await connectToDatabase();
+      const db = await getDatabaseConnection();
       const query: any = {};
 
       if (req.query.minPreco || req.query.maxPreco) {
@@ -121,7 +108,7 @@ app.get(
 
 app.post("/api/cursos", validateCourse, async (req: Request, res: Response) => {
   try {
-    const db = await connectToDatabase();
+    const db = await getDatabaseConnection();
     const curso = {
       ...req.body,
       data_lancamento: new Date(req.body.data_lancamento),
@@ -141,7 +128,7 @@ app.put(
   validateCourse,
   async (req: Request, res: Response) => {
     try {
-      const db = await connectToDatabase();
+      const db = await getDatabaseConnection();
       const updateData = {
         ...req.body,
         data_lancamento: new Date(req.body.data_lancamento),
@@ -163,7 +150,7 @@ app.put(
 
 app.delete("/api/cursos/:id", async (req: Request, res: Response) => {
   try {
-    const db = await connectToDatabase();
+    const db = await getDatabaseConnection();
     const result = await db.collection("cursos").deleteOne({
       _id: new ObjectId(req.params.id),
     });
