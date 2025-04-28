@@ -4,7 +4,7 @@ import {
   PORT as PORT_ENV,
 } from "@env";
 
-export const ENVIRONMENT = ENVIRONMENT_ENV || "development";
+export const ENVIRONMENT = ENVIRONMENT_ENV || "production";
 export const MONGODB_URI =
   MONGODB_URI_ENV ||
   "mongodb+srv://dodowenzel:MBSKOnW8UipvlYYH@cursos-online.oz1cz2p.mongodb.net/cursosdb?retryWrites=true&w=majority";
