@@ -85,7 +85,7 @@ app.get(
       const db = await getDatabaseConnection();
       const query: any = {};
 
-      if (req.query["minPreco"] || req.query["maxPreco"]) {
+      if (!!req.query["minPreco"] || !!req.query["maxPreco"]) {
         query["preco"] = {};
         if (req.query["minPreco"]) {
           query["preco"]["$gte"] = Number(req.query["minPreco"]);
@@ -95,13 +95,13 @@ app.get(
         }
       }
 
-      if (req.query["categoria"]) {
+      if (!!req.query["categoria"]) {
         query["categoria"] = req.query["categoria"];
       }
-      if (req.query["minDuracao"]) {
+      if (!!req.query["minDuracao"]) {
         query["duracao_horas"] = { $gte: Number(req.query["minDuracao"]) };
       }
-      if (req.query["minAvaliacao"])
+      if (!!req.query["minAvaliacao"])
         query["avaliacao"] = { $gte: Number(req.query["minAvaliacao"]) };
 
       const cursos = await db.collection("cursos").find(query).toArray();
