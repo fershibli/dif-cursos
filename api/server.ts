@@ -3,10 +3,7 @@ import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 import { body, param, query, validationResult } from "express-validator";
 import path from "path";
-import dotenv from "dotenv";
 import { getDatabaseConnection } from "./db";
-
-dotenv.config();
 
 const app = express();
 
