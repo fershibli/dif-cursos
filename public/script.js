@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function carregarCursos() {
     try {
       let url = "";
-  
+
       if (estado.tipoBusca === "rapida") {
         const params = new URLSearchParams();
         if (estado.filtros.busca) {
@@ -71,28 +71,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         url = `${API_BASE_URL}/search?${params.toString()}`;
       } else if (estado.tipoBusca === "avancada") {
-        const params = new URLSearchParams();
-        if (estado.filtros.tituloOuInstrutor) {
-          params.append("tituloOuInstrutor", estado.filtros.tituloOuInstrutor);
-        }
-        if (estado.filtros.minPreco) {
-          params.append("minPreco", estado.filtros.minPreco);
-        }
-        if (estado.filtros.maxPreco) {
-          params.append("maxPreco", estado.filtros.maxPreco);
-        }
-        if (estado.filtros.minDuracao) {
-          params.append("minDuracao", estado.filtros.minDuracao);
-        }
-        if (estado.filtros.minAvaliacao) {
-          params.append("minAvaliacao", estado.filtros.minAvaliacao);
-        }
-        if (estado.filtros.categoria) {
-          params.append("categoria", estado.filtros.categoria);
-        }
-        params.append("page", String(estado.pagina));
-        params.append("limit", String(estado.limite));
-  
+        const params = new URLSearchParams({
+          page: estado.pagina,
+          limit: estado.limite,
+          ...estado.filtros
+        });
+
         url = `${API_BASE_URL}/search/advanced?${params.toString()}`;
       } else {
         const params = new URLSearchParams({
@@ -101,14 +85,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         url = `${API_BASE_URL}?${params.toString()}`;
       }
-  
+
       const response = await fetch(url);
-  
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || "Erro ao carregar cursos");
       }
-  
+
       const data = await response.json();
       estado.cursos = data;
       renderCursos();
@@ -117,8 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Erro na busca:", error);
     }
   }
-  
-  
+
+
 
   async function exibirDetalhesCurso(id) {
     try {
@@ -132,23 +116,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     <h2>${curso.titulo}</h2>
                     <p><strong>Instrutor:</strong> ${curso.instrutor}</p>
                     <p><strong>Categoria:</strong> ${curso.categoria}</p>
-                    <p><strong>Duração:</strong> ${
-                      curso.duracao_horas
-                    } horas</p>
+                    <p><strong>Duração:</strong> ${curso.duracao_horas
+        } horas</p>
                     <p><strong>Preço:</strong> R$ ${curso.preco.toFixed(2)}</p>
-                    <p><strong>Avaliação:</strong> ${
-                      curso.avaliacao?.toFixed(1) || "N/A"
-                    } / 5</p>
-                    <p><strong>Alunos matriculados:</strong> ${
-                      curso.alunos_matriculados
-                    }</p>
+                    <p><strong>Avaliação:</strong> ${curso.avaliacao?.toFixed(1) || "N/A"
+        } / 5</p>
+                    <p><strong>Alunos matriculados:</strong> ${curso.alunos_matriculados
+        }</p>
                     <p><strong>Lançamento:</strong> ${new Date(
-                      curso.data_lancamento
-                    ).toLocaleDateString("pt-BR")}</p>
+          curso.data_lancamento
+        ).toLocaleDateString("pt-BR")}</p>
                     <div><strong>Módulos:</strong>
                         <ul>${curso.modulos
-                          .map((modulo) => `<li>${modulo}</li>`)
-                          .join("")}</ul>
+          .map((modulo) => `<li>${modulo}</li>`)
+          .join("")}</ul>
                     </div>
                 </div>
             `;
@@ -175,20 +156,17 @@ document.addEventListener("DOMContentLoaded", () => {
         (curso) => `
             <div class="curso-card">
                 <div class="curso-info">
-                    <h3 class="curso-titulo" data-id="${
-                      curso._id
-                    }" style="cursor:pointer;color:#0077cc;text-decoration:underline;">
+                    <h3 class="curso-titulo" data-id="${curso._id
+          }" style="cursor:pointer;color:#0077cc;text-decoration:underline;">
                         ${curso.titulo}
                     </h3>
                     <p>${curso.duracao_horas}h • ${curso.categoria}</p>
                     <p class="curso-preco">R$ ${curso.preco.toFixed(2)}</p>
                     <div class="curso-acoes">
-                        <button class="btn-editar" data-id="${
-                          curso._id
-                        }">Editar</button>
-                        <button class="btn-excluir" data-id="${
-                          curso._id
-                        }">Excluir</button>
+                        <button class="btn-editar" data-id="${curso._id
+          }">Editar</button>
+                        <button class="btn-excluir" data-id="${curso._id
+          }">Excluir</button>
                     </div>
                 </div>
             </div>
@@ -249,44 +227,40 @@ document.addEventListener("DOMContentLoaded", () => {
     modalContent.innerHTML = `
             <h2>${isEditando ? "Editar" : "Novo"} Curso</h2>
             <form id="form-curso">
-                <input type="hidden" id="curso-id" value="${
-                  cursoData._id || ""
-                }">
+                <input type="hidden" id="curso-id" value="${cursoData._id || ""
+      }">
                 
                 <div class="form-group">
                     <label>Título:</label>
-                    <input type="text" id="curso-titulo" value="${
-                      cursoData.titulo
-                    }" required>
+                    <input type="text" id="curso-titulo" value="${cursoData.titulo
+      }" required>
                 </div>
                 
                 <div class="form-group">
                     <label>Instrutor:</label>
-                    <input type="text" id="curso-instrutor" value="${
-                      cursoData.instrutor
-                    }" required>
+                    <input type="text" id="curso-instrutor" value="${cursoData.instrutor
+      }" required>
                 </div>
                 
                 <div class="form-group">
                     <label>Categoria:</label>
                     <select id="curso-categoria" required>
                         ${[
-                          "Tecnologia",
-                          "Negócios",
-                          "Design",
-                          "Marketing",
-                          "Saúde",
-                          "Desenvolvimento Pessoal",
-                          "Fotografia",
-                          "Música",
-                        ]
-                          .map(
-                            (opcao) =>
-                              `<option ${
-                                cursoData.categoria === opcao ? "selected" : ""
-                              }>${opcao}</option>`
-                          )
-                          .join("")}
+        "Tecnologia",
+        "Negócios",
+        "Design",
+        "Marketing",
+        "Saúde",
+        "Desenvolvimento Pessoal",
+        "Fotografia",
+        "Música",
+      ]
+        .map(
+          (opcao) =>
+            `<option ${cursoData.categoria === opcao ? "selected" : ""
+            }>${opcao}</option>`
+        )
+        .join("")}
                     </select>
                 </div>
                 
@@ -322,9 +296,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 <div class="form-group">
                     <label>Módulos (separados por vírgula):</label>
-                    <textarea id="curso-modulos" required>${
-                      cursoData.modulos.join(", ") || ""
-                    }</textarea>
+                    <textarea id="curso-modulos" required>${cursoData.modulos.join(", ") || ""
+      }</textarea>
                 </div>
                 
                 <div class="form-buttons">
@@ -423,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
     estado.pagina = 1;
     carregarCursos();
   }
-  
+
   function aplicarFiltrosAvancados(e) {
     e.preventDefault();
     const minPreco = document.getElementById("minPreco").value;
@@ -467,23 +440,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("paginacao-container").innerHTML = `
             <div class="controles-paginacao">
-                <button class="btn-pagina ${
-                  estado.pagina === 1 ? "disabled" : ""
-                }" 
+                <button class="btn-pagina ${estado.pagina === 1 ? "disabled" : ""
+      }" 
                     ${estado.pagina === 1 ? "disabled" : ""} id="btn-anterior">
                     Anterior
                 </button>
                 
-                <span class="pagina-atual">Página ${
-                  estado.pagina
-                } de ${totalPaginas}</span>
+                <span class="pagina-atual">Página ${estado.pagina
+      } de ${totalPaginas}</span>
                 
-                <button class="btn-pagina ${
-                  estado.pagina === totalPaginas ? "disabled" : ""
-                }" 
-                    ${
-                      estado.pagina === totalPaginas ? "disabled" : ""
-                    } id="btn-proximo">
+                <button class="btn-pagina ${estado.pagina === totalPaginas ? "disabled" : ""
+      }" 
+                    ${estado.pagina === totalPaginas ? "disabled" : ""
+      } id="btn-proximo">
                     Próxima
                 </button>
             </div>
