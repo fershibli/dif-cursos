@@ -12,6 +12,10 @@ Este projeto foi desenvolvido por alunos da Faculdade de Tecnologia de Votoranti
 
 Este projeto se refere à uma API RESTful de administração de cursos online onde há um sistema de armazenamento de cursos. Essa API foi desenvolvida em Node e MongoDB para estocagem de criação de novos cursos e atualizações.
 
+### Vercel Live Demo 
+
+[Link da API no Vercel](https://dif-cursos.vercel.app)
+
 ### Estrutura do projeto
 
 ```bash
@@ -33,10 +37,6 @@ dif-cursos/                       # Raiz do projeto
 ├── tsconfig.json                 # Configuração do TypeScript
 └── vercel.json                   # Configuração de deploy na Vercel
 ```
-
-## Vercel
-
-[Link da API no Vercel](https://dif-cursos.vercel.app)
 
 ## Stacks 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
