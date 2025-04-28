@@ -389,15 +389,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function aplicarFiltrosAvancados(e) {
     e.preventDefault();
-    estado.filtros = {
-      minPreco: document.getElementById("minPreco").value,
-      maxPreco: document.getElementById("maxPreco").value,
-      minAvaliacao: document.getElementById("minAvaliacao").value,
-      maxDuracao: document.getElementById("maxDuracao").value,
-      categorias: document.getElementById("categorias").value,
-      excluirCategorias: document.getElementById("excluirCategorias").value,
-      lancamentoApos: document.getElementById("lancamentoApos").value,
-    };
+    const minPreco = document.getElementById("minPreco").value;
+    const maxPreco = document.getElementById("maxPreco").value;
+    const minAvaliacao = document.getElementById("minAvaliacao").value;
+    const maxDuracao = document.getElementById("maxDuracao").value;
+    const categorias = document.getElementById("categorias").value;
+    const excluirCategorias =
+      document.getElementById("excluirCategorias").value;
+    const lancamentoApos = document.getElementById("lancamentoApos").value;
+    estado.filtros = {};
+    if (minPreco) estado.filtros.minPreco = minPreco;
+    if (maxPreco) estado.filtros.maxPreco = maxPreco;
+    if (minAvaliacao) estado.filtros.minAvaliacao = minAvaliacao;
+    if (maxDuracao) estado.filtros.maxDuracao = maxDuracao;
+    if (categorias) estado.filtros.categorias = categorias;
+    if (excluirCategorias) estado.filtros.excluirCategorias = excluirCategorias;
+    if (lancamentoApos) estado.filtros.lancamentoApos = lancamentoApo;
     estado.pagina = 1;
     filtrosModal.style.display = "none";
     carregarCursos();
