@@ -5,6 +5,7 @@
   "main": "dist/api/server.js",
   "scripts": {
     "build": "tsc && copyfiles -u 1 public/**/* dist/public",
+    "clean": "rimraf dist",
     "start": "node dist/api/server.js",
     "dev": "ts-node-dev --respawn --transpile-only api/server.ts"
   },
