@@ -4,8 +4,7 @@
   "description": "API Rest para cursos online",
   "main": "dist/api/server.js",
   "scripts": {
-    "build": "npm run clean && tsc && copyfiles -u 1 public/**/* dist",
-    "clean": "rimraf dist",
+    "build": "tsc && copyfiles -u 1 public/**/* dist/public",
     "start": "node dist/api/server.js",
     "dev": "ts-node-dev --respawn --transpile-only api/server.ts"
   },
