@@ -42,6 +42,25 @@ const validateCourse = [
   },
 ];
 
+app.get("/api/cursos/search", async (req: Request, res: Response) => {
+  try {
+    const db = await getDatabaseConnection();
+    const termoBusca = (req.query.busca as string) || "";
+
+    const cursos = await db.collection("cursos").find({
+      $or: [
+        { titulo: { $regex: termoBusca, $options: "i" } },
+        { instrutor: { $regex: termoBusca, $options: "i" } },
+        { categoria: { $regex: termoBusca, $options: "i" } },
+      ],
+    }).toArray();
+
+    res.json(cursos);
+  } catch (error) {
+    res.status(500).json({ message: "Erro na busca rápida", error });
+  }
+});
+
 app.get("/api/cursos", async (req: Request, res: Response) => {
   try {
     const db = await getDatabaseConnection();
