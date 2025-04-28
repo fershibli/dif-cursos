@@ -380,13 +380,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function aplicarBuscaRapida() {
+    estado.tipoBusca = "rapida";
     estado.filtros = {
-      tituloOuInstrutor: buscaRapidaInput.value.trim(),
+      busca: buscaRapidaInput.value.trim(),
     };
     estado.pagina = 1;
     carregarCursos();
   }
-
+  
   function aplicarFiltrosAvancados(e) {
     e.preventDefault();
     const minPreco = document.getElementById("minPreco").value;
