@@ -62,24 +62,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function carregarCursos() {
     try {
-      const params = new URLSearchParams({
-        page: estado.pagina,
-        limit: estado.limite,
-        ...estado.filtros,
-      });
-
-      const response = await fetch(`${API_BASE_URL}/search/advanced?${params}`);
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Erro ao carregar cursos");
+      let url = "";
+  
+      if (estado.tipoBusca === "rapida") {
+        const params = new URLSearchParams();
+        if (estado.filtros.busca) {
+          params.append("busca", estado.filtros.busca);
+        }
+        url = `/api/cursos/search?${params.toString()}`;
+      } else {
+        const params = new URLSearchParams();
+        if (estado.filtros.tituloOuInstrutor) {
+          params.append("tituloOuInstrutor", estado.filtros.tituloOuInstrutor);
+        }
+        if (estado.filtros.minPreco) {
+          params.append("minPreco", estado.filtros.minPreco);
+        }
+        if (estado.filtros.maxPreco) {
+          params.append("maxPreco", estado.filtros.maxPreco);
+        }
+        if (estado.filtros.minDuracao) {
+          params.append("minDuracao", estado.filtros.minDuracao);
+        }
+        if (estado.filtros.minAvaliacao) {
+          params.append("minAvaliacao", estado.filtros.minAvaliacao);
+        }
+        if (estado.filtros.categoria) {
+          params.append("categoria", estado.filtros.categoria);
+        }
+        url = `/api/cursos/search/advanced?${params.toString()}`;
       }
-
-      const data = await response.json();
-      estado.cursos = data;
-      renderCursos();
+  
+      const resposta = await fetch(url);
+      if (!resposta.ok) {
+        throw new Error("Erro ao carregar cursos");
+      }
+  
+      const cursos = await resposta.json();
+      console.log(cursos);
+      renderizarCursos(cursos);
     } catch (error) {
-      mostrarToast("Erro", error.message, false);
       console.error("Erro na busca:", error);
     }
   }
