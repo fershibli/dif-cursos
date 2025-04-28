@@ -6,6 +6,8 @@ import path from "path";
 import dotenv from "dotenv";
 
 dotenv.config();
+const __dirname = path.resolve();
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,8 +15,18 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://dodowenzel:MBSKOnW
 
 app.use(cors());
 app.use(express.json());
-if (process.env.NODE_ENV !== "production") {
-  app.use(express.static(path.join(__dirname, "../public")));
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'public')));
+  
+  app.get('*', (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  });
+} else {
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.get('/', (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  });
 }
 
 let cachedDb: any = null;
