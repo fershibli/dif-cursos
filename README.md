@@ -48,4 +48,98 @@ dif-cursos/                       # Raiz do projeto
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 
+# Chamadas REST
+### GET /api/cursos
+Retorna todos os cursos cadastrados.
 
+**Resposta:**  
+- 200: Array de cursos  
+- 500: Erro ao buscar cursos
+
+### GET /api/cursos/search?busca=...
+
+Busca rápida de cursos por título, instrutor ou categoria.
+
+**Query Params:**
+- `busca` (string, opcional): termo de busca
+
+**Resposta:**  
+- 200: Array de cursos encontrados  
+- 500: Erro na busca rápida
+
+### GET /api/cursos/:id
+
+Busca um curso pelo seu ID.
+
+**Params:**
+- `id` (string): ID do curso
+
+**Resposta:**  
+- 200: Objeto do curso  
+- 404: Curso não encontrado  
+- 500: Erro ao buscar curso
+
+### GET /api/cursos/search/advanced
+
+Busca avançada de cursos com múltiplos filtros.
+
+**Query Params (todos opcionais):**
+- `minPreco` (float): Preço mínimo
+- `maxPreco` (float): Preço máximo
+- `categoria` (string): Categoria do curso
+- `minDuracao` (float): Duração mínima (horas)
+- `minAvaliacao` (float): Avaliação mínima (0-5)
+- `tituloOuInstrutor` (string): Busca por título ou instrutor
+
+**Resposta:**  
+- 200: Array de cursos filtrados  
+- 400: Erro de validação dos filtros  
+- 500: Erro na busca avançada
+
+### POST /api/cursos
+
+Cria um novo curso.
+
+**Body (JSON):**
+- `titulo` (string, obrigatório)
+- `instrutor` (string, obrigatório)
+- `categoria` (string, obrigatório)
+- `duracao_horas` (float, obrigatório)
+- `alunos_matriculados` (int, obrigatório)
+- `data_lancamento` (ISO date, obrigatório)
+- `preco` (float, obrigatório)
+- `avaliacao` (float, opcional, 0-5)
+- `modulos` (array de string, obrigatório)
+
+**Resposta:**  
+- 201: Curso criado  
+- 400: Erro de validação  
+- 500: Erro ao criar curso
+
+### PUT /api/cursos/:id
+
+Atualiza um curso existente.
+
+**Params:**
+- `id` (string): ID do curso
+
+**Body (JSON):**  
+Mesmos campos do POST.
+
+**Resposta:**  
+- 200: Curso atualizado  
+- 404: Curso não encontrado  
+- 400: Erro de validação  
+- 500: Erro ao atualizar curso
+
+### DELETE /api/cursos/:id
+
+Remove um curso pelo ID.
+
+**Params:**
+- `id` (string): ID do curso
+
+**Resposta:**  
+- 200: Curso excluído com sucesso  
+- 404: Curso não encontrado  
+- 500: Erro ao excluir curso
