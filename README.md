@@ -12,7 +12,7 @@ Este projeto foi desenvolvido por alunos da Faculdade de Tecnologia de Votoranti
 
 Este projeto se refere à uma API RESTful de administração de cursos online onde há um sistema de armazenamento de cursos. Essa API foi desenvolvida em Node e MongoDB para estocagem de criação de novos cursos e atualizações.
 
-### Vercel Live Demo 
+### Vercel Live Demo
 
 [Link da API no Vercel](https://dif-cursos.vercel.app)
 
@@ -38,7 +38,8 @@ dif-cursos/                       # Raiz do projeto
 └── vercel.json                   # Configuração de deploy na Vercel
 ```
 
-## Stacks 
+## Stacks
+
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![Javascript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
@@ -49,11 +50,14 @@ dif-cursos/                       # Raiz do projeto
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 
 # Chamadas REST
+
 ### GET /api/cursos
+
 Retorna todos os cursos cadastrados.
 
-**Resposta:**  
-- 200: Array de cursos  
+**Resposta:**
+
+- 200: Array de cursos
 - 500: Erro ao buscar cursos
 
 ### GET /api/cursos/search?busca=...
@@ -61,10 +65,12 @@ Retorna todos os cursos cadastrados.
 Busca rápida de cursos por título, instrutor ou categoria.
 
 **Query Params:**
+
 - `busca` (string, opcional): termo de busca
 
-**Resposta:**  
-- 200: Array de cursos encontrados  
+**Resposta:**
+
+- 200: Array de cursos encontrados
 - 500: Erro na busca rápida
 
 ### GET /api/cursos/:id
@@ -72,11 +78,13 @@ Busca rápida de cursos por título, instrutor ou categoria.
 Busca um curso pelo seu ID.
 
 **Params:**
+
 - `id` (string): ID do curso
 
-**Resposta:**  
-- 200: Objeto do curso  
-- 404: Curso não encontrado  
+**Resposta:**
+
+- 200: Objeto do curso
+- 404: Curso não encontrado
 - 500: Erro ao buscar curso
 
 ### GET /api/cursos/search/advanced
@@ -84,6 +92,7 @@ Busca um curso pelo seu ID.
 Busca avançada de cursos com múltiplos filtros.
 
 **Query Params (todos opcionais):**
+
 - `minPreco` (float): Preço mínimo
 - `maxPreco` (float): Preço máximo
 - `categoria` (string): Categoria do curso
@@ -91,9 +100,10 @@ Busca avançada de cursos com múltiplos filtros.
 - `minAvaliacao` (float): Avaliação mínima (0-5)
 - `tituloOuInstrutor` (string): Busca por título ou instrutor
 
-**Resposta:**  
-- 200: Array de cursos filtrados  
-- 400: Erro de validação dos filtros  
+**Resposta:**
+
+- 200: Array de cursos filtrados
+- 400: Erro de validação dos filtros
 - 500: Erro na busca avançada
 
 ### POST /api/cursos
@@ -101,6 +111,7 @@ Busca avançada de cursos com múltiplos filtros.
 Cria um novo curso.
 
 **Body (JSON):**
+
 - `titulo` (string, obrigatório)
 - `instrutor` (string, obrigatório)
 - `categoria` (string, obrigatório)
@@ -111,9 +122,10 @@ Cria um novo curso.
 - `avaliacao` (float, opcional, 0-5)
 - `modulos` (array de string, obrigatório)
 
-**Resposta:**  
-- 201: Curso criado  
-- 400: Erro de validação  
+**Resposta:**
+
+- 201: Curso criado
+- 400: Erro de validação
 - 500: Erro ao criar curso
 
 ### PUT /api/cursos/:id
@@ -121,15 +133,17 @@ Cria um novo curso.
 Atualiza um curso existente.
 
 **Params:**
+
 - `id` (string): ID do curso
 
-**Body (JSON):**  
+**Body (JSON):**
 Mesmos campos do POST.
 
-**Resposta:**  
-- 200: Curso atualizado  
-- 404: Curso não encontrado  
-- 400: Erro de validação  
+**Resposta:**
+
+- 200: Curso atualizado
+- 404: Curso não encontrado
+- 400: Erro de validação
 - 500: Erro ao atualizar curso
 
 ### DELETE /api/cursos/:id
@@ -137,9 +151,11 @@ Mesmos campos do POST.
 Remove um curso pelo ID.
 
 **Params:**
+
 - `id` (string): ID do curso
 
-**Resposta:**  
-- 200: Curso excluído com sucesso  
-- 404: Curso não encontrado  
+**Resposta:**
+
+- 200: Curso excluído com sucesso
+- 404: Curso não encontrado
 - 500: Erro ao excluir curso
