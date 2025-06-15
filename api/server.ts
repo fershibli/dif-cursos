@@ -127,9 +127,34 @@ app.get(
                 }
             }
 
-            if (!!req.query["categoria"]) {
-                query["categoria"] = req.query["categoria"]
+            const categoriaConditions = []
+
+            if (req.query["categoria"]) {
+                const categoriasIncluidas = (req.query["categoria"] as string)
+                    .split(",")
+                    .map((cat) => cat.trim())
+                categoriaConditions.push({
+                    categoria: { $in: categoriasIncluidas },
+                })
             }
+
+            if (req.query["excluirCategorias"]) {
+                const categoriasExcluidas = (
+                    req.query["excluirCategorias"] as string
+                )
+                    .split(",")
+                    .map((cat) => cat.trim())
+
+                categoriaConditions.push({
+                    categoria: { $nin: categoriasExcluidas },
+                })
+            }
+
+            if (categoriaConditions.length > 0) {
+                query.$and = query.$and || []
+                query.$and.push(...categoriaConditions)
+            }
+
             if (!!req.query["minDuracao"]) {
                 query["duracao_horas"] = {
                     $gte: Number(req.query["minDuracao"]),
