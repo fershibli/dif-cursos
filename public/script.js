@@ -416,9 +416,10 @@ document.addEventListener("DOMContentLoaded", () => {
         carregarCursos()
     }
 
-    function aplicarFiltrosAvancados(e) {
+    async function aplicarFiltrosAvancados(e) {
         e.preventDefault()
         estado.tipoBusca = "avancada"
+
         const minPreco = document.getElementById("minPreco").value
         const maxPreco = document.getElementById("maxPreco").value
         const minAvaliacao = document.getElementById("minAvaliacao").value
@@ -427,18 +428,36 @@ document.addEventListener("DOMContentLoaded", () => {
         const excluirCategorias =
             document.getElementById("excluirCategorias").value
         const lancamentoApos = document.getElementById("lancamentoApos").value
-        estado.filtros = {}
-        if (minPreco) estado.filtros.minPreco = minPreco
-        if (maxPreco) estado.filtros.maxPreco = maxPreco
-        if (minAvaliacao) estado.filtros.minAvaliacao = minAvaliacao
-        if (maxDuracao) estado.filtros.maxDuracao = maxDuracao
-        if (categoria) estado.filtros.categoria = categoria
-        if (excluirCategorias)
-            estado.filtros.excluirCategorias = excluirCategorias
-        if (lancamentoApos) estado.filtros.lancamentoApos = lancamentoApos
-        estado.pagina = 1
-        filtrosModal.style.display = "none"
-        carregarCursos()
+
+        try {
+            const params = new URLSearchParams()
+            if (minPreco) params.append("minPreco", minPreco)
+            if (maxPreco) params.append("maxPreco", maxPreco)
+            if (minAvaliacao) params.append("minAvaliacao", minAvaliacao)
+            if (maxDuracao) params.append("minDuracao", maxDuracao)
+            if (categoria) params.append("categoria", categoria)
+            if (excluirCategorias)
+                params.append("excluirCategorias", excluirCategorias)
+            if (lancamentoApos) params.append("lancamentoApos", lancamentoApos)
+
+            const response = await fetch(
+                `${API_BASE_URL}/search/advanced?${params.toString()}`
+            )
+            const data = await response.json()
+
+            if (!response.ok) {
+                throw new Error(
+                    data.errors?.map((e) => e.msg).join(", ") || data.message
+                )
+            }
+
+            estado.cursos = data
+            estado.pagina = 1
+            filtrosModal.style.display = "none"
+            renderCursos()
+        } catch (error) {
+            mostrarToast("Erro", error.message, false)
+        }
     }
 
     function limparFiltros() {
