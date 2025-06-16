@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - DIF Cursos</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="cadastro-container">
+      <div class="cadastro-form">
+        <h2><center>Cadastro de Novo Usuário</center></h2>
+        <br />
+        <form id="cadastro-form">
+          <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" id="name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" required />
+          </div>
+
+          <div class="form-group">
+            <label for="confirmar-senha">Confirmar Senha</label>
+            <input type="password" id="confirmar-senha" required />
+          </div>
+
+          <button type="submit" class="btn-register">Cadastrar</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="apiClient.js"></script>
+    <script src="cadastro.js"></script>
+  </body>
+</html>
