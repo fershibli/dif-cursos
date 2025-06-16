@@ -38,7 +38,7 @@ export const efetuaLogin = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Dados de login inválidos" });
     }
 
-    const secretKey = process.env.SECRET || "secret";
+    const secretKey = process.env.SECRET_KEY || "secret";
     const expiresIn = process.env.EXPIRES_IN || "1h"; // Default to 1 hour if not set
     const options: jwt.SignOptions = {
       expiresIn: expiresIn as jwt.SignOptions["expiresIn"],
