@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (estado.filtros.busca) {
           params.append("busca", estado.filtros.busca);
         }
-        url = `cursos/search?${params.toString()}`;
+        url = `/cursos/search?${params.toString()}`;
       } else if (estado.tipoBusca === "avancada") {
         const params = new URLSearchParams({
           page: estado.pagina,
@@ -74,13 +74,13 @@ document.addEventListener("DOMContentLoaded", () => {
           ...estado.filtros,
         });
 
-        url = `cursos/search/advanced?${params.toString()}`;
+        url = `/cursos/search/advanced?${params.toString()}`;
       } else {
         const params = new URLSearchParams({
           page: String(estado.pagina),
           limit: String(estado.limite),
         });
-        url = `cursos?${params.toString()}`;
+        url = `/cursos?${params.toString()}`;
       }
 
       const response = await apiFetch(url);
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function exibirDetalhesCurso(id) {
     try {
-      const response = await apiFetch(`cursos/${id}`);
+      const response = await apiFetch(`/cursos/${id}`);
       if (!response.ok) throw new Error("Curso não encontrado");
 
       const curso = await response.json();
@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function carregarCursoParaEdicao(id) {
     try {
-      const response = await apiFetch(`cursos/${id}`);
+      const response = await apiFetch(`/cursos/${id}`);
       if (!response.ok) throw new Error("Erro ao carregar curso");
 
       estado.cursoEditando = await response.json();
@@ -352,8 +352,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const url = estado.cursoEditando
-        ? `cursos/${estado.cursoEditando._id}`
-        : "cursos";
+        ? `/cursos/${estado.cursoEditando._id}`
+        : "/cursos";
 
       const method = estado.cursoEditando ? "PUT" : "POST";
 
@@ -383,7 +383,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function excluirCurso(id) {
     try {
-      const response = await apiFetch(`cursos/${id}`, {
+      const response = await apiFetch(`/cursos/${id}`, {
         method: "DELETE",
       });
 
@@ -433,7 +433,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (lancamentoApos) params.append("lancamentoApos", lancamentoApos);
 
       const response = await apiFetch(
-        `cursos/search/advanced?${params.toString()}`
+        `/cursos/search/advanced?${params.toString()}`
       );
       const data = await response.json();
 
