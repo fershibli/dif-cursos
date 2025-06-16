@@ -8,7 +8,7 @@ export default async function auth(
   res: Response,
   next: NextFunction
 ) {
-  const token = req.header("access-token");
+  const token = req.header("Authorization")?.replace("Bearer ", "");
   if (!token)
     return res.status(401).json({
       msg: "Acesso negado. É obrgatório o envio de token JWT",
