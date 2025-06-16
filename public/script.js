@@ -229,9 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const dataLancamento = isEditando
-            ? new Date(
-                  cursoData.data_lancamento + "T00:00:00"
-              ).toLocaleDateString("en-CA")
+            ? new Date(cursoData.data_lancamento).toISOString().split("T")[0]
             : cursoData.data_lancamento
 
         modalContent.innerHTML = `
