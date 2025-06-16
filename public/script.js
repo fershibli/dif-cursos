@@ -228,6 +228,10 @@ document.addEventListener("DOMContentLoaded", () => {
             modulos: [],
         }
 
+        const dataLancamento = isEditando
+            ? new Date(cursoData.data_lancamento).toISOString().split("T")[0]
+            : cursoData.data_lancamento
+
         modalContent.innerHTML = `
             <h2>${isEditando ? "Editar" : "Novo"} Curso</h2>
             <form id="form-curso">
@@ -301,7 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="form-group">
                     <label>Data de Lançamento:</label>
                     <input type="date" id="curso-data" 
-                        value="${cursoData.data_lancamento}" required>
+                        value="${dataLancamento}" required>
                 </div>
                 
                 <div class="form-group">
