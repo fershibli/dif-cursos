@@ -1,5 +1,3 @@
-const { apiFetch } = require("./apiClient");
-
 document.addEventListener("DOMContentLoaded", () => {
   const cursosContainer = document.getElementById("cursos-container");
   const cursoModal = document.getElementById("curso-modal");
