@@ -447,3 +447,54 @@ header h1 {
         width: 100%;
     }
 }
+
+.login {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.login input {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    min-width: 250px;
+}
+
+.login button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    background-color: #2a86c4;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login button:hover {
+    background-color: #145681;
+}
+
+.register button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    background-color: #26ac7f;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.register button:hover {
+    background-color: #0f6351;
+}
+
+.register input {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    min-width: 250px;
+}
