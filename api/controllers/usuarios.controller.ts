@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { ITokenPayload } from "../interfaces/tokenPayload.interface";
 
 export const insereUsuario = async (req: Request, res: Response) => {
   req.body.avatar = `https://ui-avatars.com/api/?name=${req.body.nome.replace(
@@ -42,19 +43,20 @@ export const efetuaLogin = async (req: Request, res: Response) => {
       expiresIn: expiresIn as jwt.SignOptions["expiresIn"],
     };
 
-    jwt.sign(
-      { usuario: { id: usuario[0]._id } },
-      secretKey,
-      options,
-      (err, token) => {
-        if (err) {
-          console.error(err);
-          throw err;
-        }
+    const tokenPayload: ITokenPayload = {
+      usuario: {
+        id: usuario[0]._id, // Convert ObjectId to string
+      },
+    };
 
-        res.status(200).json({ message: "Login realizado com sucesso", token });
+    jwt.sign(tokenPayload, secretKey, options, (err, token) => {
+      if (err) {
+        console.error(err);
+        throw err;
       }
-    );
+
+      res.status(200).json({ message: "Login realizado com sucesso", token });
+    });
   } catch (error) {
     res.status(500).json({ message: "Erro ao efetuar login", error });
   }
