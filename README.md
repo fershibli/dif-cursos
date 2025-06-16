@@ -49,6 +49,8 @@ dif-cursos/                         # Raiz do projeto
 │   ├── script.js                   # Lógica JavaScript do frontend
 │   └── style.css                   # Estilos CSS do frontend
 │
+├── .env_example                    # Exemplo de arquivo .env a ser copiado para .env
+├── .env                            # Variáveis de ambiente (não versionado)
 ├── .gitignore                      # Arquivos e pastas ignorados pelo Git
 ├── .prettierrc                     # Configuração do Prettier
 ├── package.json                    # Configurações e dependências do Node.js
