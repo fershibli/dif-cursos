@@ -109,6 +109,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const curso = await response.json()
 
+            curso.data_lancamento = new Date(cursoData.data_lancamento)
+                .toISOString()
+                .split("T")[0]
+
             modalContent.innerHTML = `
                 <div class="curso-detalhes">
                     <h2>${curso.titulo}</h2>
@@ -124,9 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p><strong>Alunos matriculados:</strong> ${
                         curso.alunos_matriculados
                     }</p>
-                    <p><strong>Lançamento:</strong> ${new Date(
-                        curso.data_lancamento
-                    ).toLocaleDateString("pt-BR")}</p>
+                    <p><strong>Lançamento:</strong> ${curso.data_lancamento}</p>
                     <div><strong>Módulos:</strong>
                         <ul>${curso.modulos
                             .map((modulo) => `<li>${modulo}</li>`)
