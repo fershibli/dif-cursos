@@ -1,10 +1,18 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
+import * as dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger";
 import cursoRoutes from "./routes/cursos.routes";
 import usuarioRoutes from "./routes/usuarios.routes";
+
+const result = dotenv.config();
+if (result.error) {
+  throw result.error;
+}
+console.log("Variáveis de ambiente carregadas com sucesso");
+console.log("Ambiente:", process.env.ENVIRONMENT);
 
 const app = express();
 
@@ -24,9 +32,15 @@ app.get("/api-docs.json", (req, res) => {
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/cursos", cursoRoutes);
 
-export default app;
+const isServerless = process.env.ENVIRONMENT !== "development";
 
 // run on 3000
-// app.listen(3000, () => {
-//   console.log("Servidor rodando na porta 3000");
-// });
+if (!isServerless) {
+  app.listen(3000, () => {
+    console.log("Servidor rodando na porta 3000");
+  });
+} else {
+  console.log("Servidor rodando em ambiente serverless");
+}
+
+export default app;
