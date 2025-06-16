@@ -1,85 +1,103 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cursos Online</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header>
-    <h1>Cursos Online</h1>
-    <div class="header-actions">
-        <button id="btn-listar-cursos">Listar Cursos</button>
-        <button id="btn-novo-curso">Novo Curso</button>
-        <div class="search-container">
-            <input type="text" id="busca-rapida" placeholder="Buscar cursos...">
-            <button id="btn-busca-rapida">Buscar</button>
-            <button id="btn-filtros-avancados">Filtros Avançados</button>
-        </div>
-    </div>
-</header>
-    
-    <main>
-        <div class="cursos-grid" id="cursos-container">
-        </div>
-    </main>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Cursos Online</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <header>
+            <h1>DIF Cursos Online</h1>
+            <div class="header-actions">
+                <div class="search-container">
+                    <button id="btn-listar-cursos">Listar Cursos</button>
+                    <button id="btn-novo-curso">Novo Curso</button>
+                    <input
+                        type="text"
+                        id="busca-rapida"
+                        placeholder="Buscar cursos..."
+                    />
+                    <button id="btn-busca-rapida">Buscar</button>
+                    <button id="btn-filtros-avancados">
+                        Filtros Avançados
+                    </button>
+                </div>
+            </div>
+        </header>
 
-    <div class="modal" id="filtros-modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Filtros Avançados</h2>
-            <form id="form-filtros">
-                <div class="form-group">
-                    <label for="minPreco">Preço Mínimo:</label>
-                    <input type="number" id="minPreco" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label for="maxPreco">Preço Máximo:</label>
-                    <input type="number" id="maxPreco" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label for="minAvaliacao">Avaliação Mínima (0-5):</label>
-                    <input type="number" id="minAvaliacao" min="0" max="5" step="0.1">
-                </div>
-                
-                <div class="form-group">
-                    <label for="maxDuracao">Duração Máxima (horas):</label>
-                    <input type="number" id="maxDuracao" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label for="categorias">Categorias (separadas por vírgula):</label>
-                    <input type="text" id="categorias">
-                </div>
-                
-                <div class="form-group">
-                    <label for="excluirCategorias">Excluir Categorias (separadas por vírgula):</label>
-                    <input type="text" id="excluirCategorias">
-                </div>
-                
-                <div class="form-group">
-                    <label for="lancamentoApos">Lançamento após:</label>
-                    <input type="date" id="lancamentoApos">
-                </div>
-                
-                <div class="form-buttons">
-                    <button type="submit">Aplicar Filtros</button>
-                    <button type="button" id="limpar-filtros">Limpar Filtros</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="modal" id="curso-modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modal-content">
+        <main>
+            <div class="cursos-grid" id="cursos-container"></div>
+        </main>
+
+        <div class="modal" id="filtros-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Filtros Avançados</h2>
+                <form id="form-filtros">
+                    <div class="form-group">
+                        <label for="minPreco">Preço Mínimo:</label>
+                        <input type="number" id="minPreco" min="0" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxPreco">Preço Máximo:</label>
+                        <input type="number" id="maxPreco" min="0" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="minAvaliacao"
+                            >Avaliação Mínima (0-5):</label
+                        >
+                        <input
+                            type="number"
+                            id="minAvaliacao"
+                            min="0"
+                            max="5"
+                            step="0.1"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxDuracao">Duração Máxima (horas):</label>
+                        <input type="number" id="maxDuracao" min="0" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categorias"
+                            >Categorias (separadas por vírgula):</label
+                        >
+                        <input type="text" id="categorias" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="excluirCategorias"
+                            >Excluir Categorias (separadas por vírgula):</label
+                        >
+                        <input type="text" id="excluirCategorias" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lancamentoApos">Lançamento após:</label>
+                        <input type="date" id="lancamentoApos" />
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit">Aplicar Filtros</button>
+                        <button type="button" id="limpar-filtros">
+                            Limpar Filtros
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>
+        <div class="modal" id="curso-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modal-content"></div>
+            </div>
+        </div>
 
-    <script src="script.js"></script>
-</body>
+        <script src="script.js"></script>
+    </body>
 </html>
