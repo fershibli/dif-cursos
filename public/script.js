@@ -109,9 +109,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const curso = await response.json()
 
-            curso.data_lancamento = new Date(
-                curso.data_lancamento
-            ).toLocaleDateString("pt-BR")
+            curso.data_lancamento = new Date(curso.data_lancamento)
+                .toISOString()
+                .split("T")[0]
 
             modalContent.innerHTML = `
                 <div class="curso-detalhes">
@@ -226,12 +226,12 @@ document.addEventListener("DOMContentLoaded", () => {
             preco: 0,
             avaliacao: 0,
             alunos_matriculados: 0,
-            data_lancamento: new Date().toLocaleDateString("pt-BR"),
+            data_lancamento: new Date().toISOString().split("T")[0],
             modulos: [],
         }
 
         const dataLancamento = isEditando
-            ? new Date(cursoData.data_lancamento).toLocaleDateString("pt-BR")
+            ? new Date(cursoData.data_lancamento).toISOString().split("T")[0]
             : cursoData.data_lancamento
 
         modalContent.innerHTML = `
