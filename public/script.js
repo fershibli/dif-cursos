@@ -1,9 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_BASE_URL =
-    window.location.hostname === "localhost"
-      ? "http://localhost:3000/api/cursos"
-      : `https://${window.location.hostname}/api/cursos`;
-
   const cursosContainer = document.getElementById("cursos-container");
   const cursoModal = document.getElementById("curso-modal");
   const modalContent = document.getElementById("modal-content");
@@ -62,13 +57,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function carregarCursos() {
     try {
-      const params = new URLSearchParams({
-        page: estado.pagina,
-        limit: estado.limite,
-        ...estado.filtros,
-      });
+      let url = "";
 
-      const response = await fetch(`${API_BASE_URL}/search/advanced?${params}`);
+      if (estado.tipoBusca === "rapida") {
+        const params = new URLSearchParams();
+        if (estado.filtros.busca) {
+          params.append("busca", estado.filtros.busca);
+        }
+        url = `/cursos/search?${params.toString()}`;
+      } else if (estado.tipoBusca === "avancada") {
+        const params = new URLSearchParams({
+          page: estado.pagina,
+          limit: estado.limite,
+          ...estado.filtros,
+        });
+
+        url = `/cursos/search/advanced?${params.toString()}`;
+      } else {
+        const params = new URLSearchParams({
+          page: String(estado.pagina),
+          limit: String(estado.limite),
+        });
+        url = `/cursos?${params.toString()}`;
+      }
+
+      const response = await apiFetch(url);
 
       if (!response.ok) {
         const error = await response.json();
@@ -86,10 +99,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function exibirDetalhesCurso(id) {
     try {
-      const response = await fetch(`${API_BASE_URL}/${id}`);
+      const response = await apiFetch(`/cursos/${id}`);
       if (!response.ok) throw new Error("Curso não encontrado");
 
       const curso = await response.json();
+
+      curso.data_lancamento = new Date(curso.data_lancamento)
+        .toISOString()
+        .split("T")[0];
 
       modalContent.innerHTML = `
                 <div class="curso-detalhes">
@@ -106,9 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p><strong>Alunos matriculados:</strong> ${
                       curso.alunos_matriculados
                     }</p>
-                    <p><strong>Lançamento:</strong> ${new Date(
-                      curso.data_lancamento
-                    ).toLocaleDateString("pt-BR")}</p>
+                    <p><strong>Lançamento:</strong> ${curso.data_lancamento}</p>
                     <div><strong>Módulos:</strong>
                         <ul>${curso.modulos
                           .map((modulo) => `<li>${modulo}</li>`)
@@ -186,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function carregarCursoParaEdicao(id) {
     try {
-      const response = await fetch(`${API_BASE_URL}/${id}`);
+      const response = await apiFetch(`/cursos/${id}`);
       if (!response.ok) throw new Error("Erro ao carregar curso");
 
       estado.cursoEditando = await response.json();
@@ -209,6 +224,10 @@ document.addEventListener("DOMContentLoaded", () => {
       data_lancamento: new Date().toISOString().split("T")[0],
       modulos: [],
     };
+
+    const dataLancamento = isEditando
+      ? new Date(cursoData.data_lancamento).toISOString().split("T")[0]
+      : cursoData.data_lancamento;
 
     modalContent.innerHTML = `
             <h2>${isEditando ? "Editar" : "Novo"} Curso</h2>
@@ -281,7 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="form-group">
                     <label>Data de Lançamento:</label>
                     <input type="date" id="curso-data" 
-                        value="${cursoData.data_lancamento}" required>
+                        value="${dataLancamento}" required>
                 </div>
                 
                 <div class="form-group">
@@ -331,14 +350,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const url = estado.cursoEditando
-        ? `${API_BASE_URL}/${estado.cursoEditando._id}`
-        : API_BASE_URL;
+        ? `/cursos/${estado.cursoEditando._id}`
+        : "/cursos";
 
       const method = estado.cursoEditando ? "PUT" : "POST";
 
-      const response = await fetch(url, {
+      const response = await apiFetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(cursoData),
       });
 
@@ -363,7 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function excluirCurso(id) {
     try {
-      const response = await fetch(`${API_BASE_URL}/${id}`, {
+      const response = await apiFetch(`/cursos/${id}`, {
         method: "DELETE",
       });
 
@@ -380,27 +398,56 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function aplicarBuscaRapida() {
+    estado.tipoBusca = "rapida";
     estado.filtros = {
-      tituloOuInstrutor: buscaRapidaInput.value.trim(),
+      busca: buscaRapidaInput.value.trim(),
     };
     estado.pagina = 1;
     carregarCursos();
   }
 
-  function aplicarFiltrosAvancados(e) {
+  async function aplicarFiltrosAvancados(e) {
     e.preventDefault();
-    estado.filtros = {
-      minPreco: document.getElementById("minPreco").value,
-      maxPreco: document.getElementById("maxPreco").value,
-      minAvaliacao: document.getElementById("minAvaliacao").value,
-      maxDuracao: document.getElementById("maxDuracao").value,
-      categorias: document.getElementById("categorias").value,
-      excluirCategorias: document.getElementById("excluirCategorias").value,
-      lancamentoApos: document.getElementById("lancamentoApos").value,
-    };
-    estado.pagina = 1;
-    filtrosModal.style.display = "none";
-    carregarCursos();
+    estado.tipoBusca = "avancada";
+
+    const minPreco = document.getElementById("minPreco").value;
+    const maxPreco = document.getElementById("maxPreco").value;
+    const minAvaliacao = document.getElementById("minAvaliacao").value;
+    const maxDuracao = document.getElementById("maxDuracao").value;
+    const categoria = document.getElementById("categorias").value;
+    const excluirCategorias =
+      document.getElementById("excluirCategorias").value;
+    const lancamentoApos = document.getElementById("lancamentoApos").value;
+
+    try {
+      const params = new URLSearchParams();
+      if (minPreco) params.append("minPreco", minPreco);
+      if (maxPreco) params.append("maxPreco", maxPreco);
+      if (minAvaliacao) params.append("minAvaliacao", minAvaliacao);
+      if (maxDuracao) params.append("minDuracao", maxDuracao);
+      if (categoria) params.append("categoria", categoria);
+      if (excluirCategorias)
+        params.append("excluirCategorias", excluirCategorias);
+      if (lancamentoApos) params.append("lancamentoApos", lancamentoApos);
+
+      const response = await apiFetch(
+        `/cursos/search/advanced?${params.toString()}`
+      );
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.errors?.map((e) => e.msg).join(", ") || data.message
+        );
+      }
+
+      estado.cursos = data;
+      estado.pagina = 1;
+      filtrosModal.style.display = "none";
+      renderCursos();
+    } catch (error) {
+      mostrarToast("Erro", error.message, false);
+    }
   }
 
   function limparFiltros() {
