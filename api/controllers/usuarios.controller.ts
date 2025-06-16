@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { ITokenPayload } from "../interfaces/tokenPayload.interface";
+import { getDatabaseConnection } from "../db";
 
 export const insereUsuario = async (req: Request, res: Response) => {
   req.body.avatar = `https://ui-avatars.com/api/?name=${req.body.nome.replace(
@@ -10,7 +11,7 @@ export const insereUsuario = async (req: Request, res: Response) => {
   )}&background=0D8ABC&color=fff`;
   const salt = await bcrypt.genSalt(10);
   req.body.senha = await bcrypt.hash(req.body.senha, salt);
-  const db = req.app.locals.db;
+  const db = await getDatabaseConnection();
   await db
     .collection("usuarios")
     .insertOne(req.body)
@@ -21,7 +22,7 @@ export const insereUsuario = async (req: Request, res: Response) => {
 export const efetuaLogin = async (req: Request, res: Response) => {
   const { email, senha } = req.body;
   try {
-    const db = req.app.locals.db;
+    const db = await getDatabaseConnection();
     let usuario = await db
       .collection("usuarios")
       .find({ email })
