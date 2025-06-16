@@ -12,8 +12,11 @@ import {
   validateAdvancedSearch,
   validateCourse,
 } from "../middlewares/validations.middleware";
+import authMiddleware from "../middlewares/auth.middleware";
 
 const router = Router();
+
+router.use(authMiddleware);
 
 router.get("/", listarTodos);
 router.get("/search", buscarRapida);
