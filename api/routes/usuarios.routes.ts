@@ -5,7 +5,7 @@ import { validateUsuario } from "../middlewares/validations.middleware";
 const router = express.Router();
 
 // Rota para inserir um novo usuário
-router.post("/", validateUsuario, insereUsuario);
+router.post("/register", validateUsuario, insereUsuario);
 
 // Rota para efetuar login
 router.post("/login", efetuaLogin);
