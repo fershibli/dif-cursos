@@ -128,7 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p><strong>Alunos matriculados:</strong> ${
                         curso.alunos_matriculados
                     }</p>
-                    <p><strong>Lançamento:</strong> ${curso.data_lancamento}</p>
+                    <p><strong>Lançamento:</strong> ${new Date(
+                        curso.data_lancamento
+                    ).toLocaleDateString("pt-BR")}</p>
                     <div><strong>Módulos:</strong>
                         <ul>${curso.modulos
                             .map((modulo) => `<li>${modulo}</li>`)
